@@ -1,4 +1,7 @@
-import { MongoClient, ObjectID } from 'mongodb';
+import {
+    MongoClient,
+    ObjectID
+} from 'mongodb';
 
 const url = 'mongodb://localhost:27017'; // адреса сервера
 
@@ -6,18 +9,29 @@ const dbName = 'bookDB'; // назва Бази даних
 
 const collectiionName = "books"; //назва колекції
 
-function makeQueryObject (query){
+function makeQueryObject(query) {
     let result = {};
     console.log(query);
-    if (query.maxpages && query.minpages){
-        result.pages ={$and: [ {$lte:parseInt(query.maxpages)}, {$gte:parseInt(query.minpages)} ]} ;
+    if (query.maxpages && query.minpages) {
+        result.pages = {
+            $and: [{
+                $lte: parseInt(query.maxpages)
+            }, {
+                $gte: parseInt(query.minpages)
+            }]
+        };
     }
-    if (query.author){
-        result.authors ={$elemMatch: {$eq:query.author}}
+    if (query.author) {
+        result.authors = {
+            $elemMatch: {
+                $eq: query.author
+            }
+        }
     }
-    if (query.maxprice)
-    {
-        result.price={$lte: parseFloat(query.maxprice)}
+    if (query.maxprice) {
+        result.price = {
+            $lte: parseFloat(query.maxprice)
+        }
     }
     console.log(result);
     return result;
@@ -26,8 +40,10 @@ function makeQueryObject (query){
 
 const bookControler = {
     get_async: async (req, res) => { //асинхронна функція
-        try{            
-            const client = new MongoClient(url, { useUnifiedTopology: true });// створюємо нового клієнта для підключення
+        try {
+            const client = new MongoClient(url, {
+                useUnifiedTopology: true
+            }); // створюємо нового клієнта для підключення
             const connection = await client.connect(); // підключаємось
             const books = connection.db(dbName).collection(collectiionName); // вибираємо коллекцію            
             const result = await books
@@ -39,188 +55,208 @@ const bookControler = {
                     makeQueryObject(req.query)
                 )
                 .toArray(); // дія (повернути всізаписи колекції)            
-            res.send (result); // надіслати результат
+            res.send(result); // надіслати результат
             client.close(); //закрити підключення
         } catch (error) { // якщо сталася помилка
             console.log(error);
-            res.status(500).send (error);
+            res.status(500).send(error);
         }
     },
-    get_promise : (req, res) => { // функція з промісами      
-        const client = new MongoClient(url, { useUnifiedTopology: true });// створюємо нового клієнта для підключення
+    get_promise: (req, res) => { // функція з промісами      
+        const client = new MongoClient(url, {
+            useUnifiedTopology: true
+        }); // створюємо нового клієнта для підключення
         client.connect() // підключаємось
-        .then( connection => {
-            const books = connection.db(dbName).collection(collectiionName); // вибираємо коллекцію  
-            books.find(makeQueryObject(req.query)).toArray()
-            .then ( result=>{
-                client.close();
-                res.send (result);
+            .then(connection => {
+                const books = connection.db(dbName).collection(collectiionName); // вибираємо коллекцію  
+                books.find(makeQueryObject(req.query)).toArray()
+                    .then(result => {
+                        client.close();
+                        res.send(result);
+                    })
+                    .catch(error => { // обробка помилки
+                        throw error;
+                    });
             })
-            .catch (error=>{ // обробка помилки
-                throw error;
+            .catch(error => {
+                console.log(error);
+                res.status(500).send(error);
             });
-        })
-        .catch (error=>{
-            console.log(error);
-            res.status(500).send (error);
-        });                     
     },
-    get_callback : (req, res) => { // функція з колбеками     
-        const client = new MongoClient(url, { useUnifiedTopology: true });// створюємо нового клієнта для підключення
+    get_callback: (req, res) => { // функція з колбеками     
+        const client = new MongoClient(url, {
+            useUnifiedTopology: true
+        }); // створюємо нового клієнта для підключення
         client.connect(
-            (error, connection) => {// підключаємось
+            (error, connection) => { // підключаємось
                 if (error) { // якщо помилка
                     console.log(error);
-                    res.status(500).send (error);
+                    res.status(500).send(error);
                 } else {
-                    const books = connection.db(dbName).collection(collectiionName); 
+                    const books = connection.db(dbName).collection(collectiionName);
                     // вибираємо коллекцію  
-                    books.find(makeQueryObject(req.query), 
-                        (error, result)=>{
+                    books.find(makeQueryObject(req.query),
+                        (error, result) => {
                             if (error) {
                                 console.log(error);
-                                res.status(500).send (error);
+                                res.status(500).send(error);
                             } else {
-                                result.toArray( 
+                                result.toArray(
                                     (error, result) => {
                                         if (error) {
                                             console.log(error);
-                                            res.status(500).send (error);
+                                            res.status(500).send(error);
                                         } else {
                                             connection.close();
-                                            res.send (result);
+                                            res.send(result);
                                         }
                                     }
                                 );
                             }
-                        }   
+                        }
                     );
-                    
-                }  
+
+                }
             }
-        );          
+        );
     },
     getById: async (req, res) => {
 
-        try{
-        
-        const client = new MongoClient(url, { useUnifiedTopology: true }
-        );
-        
-        const connection = await client.connect();
-        
-        const books = connection.db(dbName).collection(collectiionName);
-        
-        const result = await books.findOne({ _id: ObjectID(req.params.id
-        ) }); // знайти
-        
-        if (result) //якщо знайшло
-        
-        res.send (result);
-        
-        else
-        
-        res.status(404).send("Not Found");
-        
-        client.close();
-        
+        try {
+
+            const client = new MongoClient(url, {
+                useUnifiedTopology: true
+            });
+
+            const connection = await client.connect();
+
+            const books = connection.db(dbName).collection(collectiionName);
+
+            const result = await books.findOne({
+                _id: ObjectID(req.params.id)
+            }); // знайти
+
+            if (result) //якщо знайшло
+
+                res.send(result);
+
+            else
+
+                res.status(404).send("Not Found");
+
+            client.close();
+
         } catch (error) {
-        
-        console.log(error);
-        
-        res.status(500).send (error);
-        
+
+            console.log(error);
+
+            res.status(500).send(error);
+
         }
-        
+
     },
     post: async (req, res) => {
 
-        try{
-        
-        const client = new MongoClient(url, { useUnifiedTopology: true });
-        
-        const connection = await client.connect();
-        
-        const books = connection.db(dbName).collection(collectiionName);
-        
-        const result = await books.insertOne(req.body);
-        
-        res.send (result.ops);
-        
-        client.close();
-        
+        try {
+
+            const client = new MongoClient(url, {
+                useUnifiedTopology: true
+            });
+
+            const connection = await client.connect();
+
+            const books = connection.db(dbName).collection(collectiionName);
+
+            const result = await books.insertOne(req.body);
+
+            res.send(result.ops);
+
+            client.close();
+
         } catch (error) {
-        
-        console.log(error);
-        
-        res.status(500).send (error);
-        
+
+            console.log(error);
+
+            res.status(500).send(error);
+
         }
-        
+
     },
     delete: async (req, res) => {
-        
-        try{
-        
-        const client = new MongoClient(url, { useUnifiedTopology: true });
-        
-        const connection = await client.connect();
-        
-        const books = connection.db(dbName).collection(collectiionName);
-        
-        const result = await books.findOneAndDelete({ _id: ObjectID(req.params.id) }, req.body);
-        
-        if (result)
-        
-        res.send (result);
-        
-        else
-        
-        res.status(404).send("Not Found");
-        
-        client.close();
-        
+
+        try {
+
+            const client = new MongoClient(url, {
+                useUnifiedTopology: true
+            });
+
+            const connection = await client.connect();
+
+            const books = connection.db(dbName).collection(collectiionName);
+
+            const result = await books.findOneAndDelete({
+                _id: ObjectID(req.params.id)
+            }, req.body);
+
+            if (result)
+
+                res.send(result);
+
+            else
+
+                res.status(404).send("Not Found");
+
+            client.close();
+
         } catch (error) {
-        
-        console.log(error);
-        
-        res.status(500).send (error);
-        
+
+            console.log(error);
+
+            res.status(500).send(error);
+
         }
-        
+
     },
     patch: async (req, res) => {
-        
-        try{
-        
-        const client = new MongoClient(url, { useUnifiedTopology: true });
-        
-        const connection = await client.connect();
-        
-        const books = connection.db(dbName).collection(collectiionName);
-        
-        const result= await books.findOneAndUpdate({ _id: ObjectID(req.params.id)},
-        
-        { $set: req.body}, { returnOriginal: false });
-        
-        if (result.value)
-        
-        res.send (result.value);
-        
-        else
-        
-        res.status(404).send("Not Found");
-        
-        client.close();
-        
+
+        try {
+
+            const client = new MongoClient(url, {
+                useUnifiedTopology: true
+            });
+
+            const connection = await client.connect();
+
+            const books = connection.db(dbName).collection(collectiionName);
+
+            const result = await books.findOneAndUpdate({
+                    _id: ObjectID(req.params.id)
+                },
+
+                {
+                    $set: req.body
+                }, {
+                    returnOriginal: false
+                });
+
+            if (result.value)
+
+                res.send(result.value);
+
+            else
+
+                res.status(404).send("Not Found");
+
+            client.close();
+
         } catch (error) {
-        
-        console.log(error);
-        
-        res.status(500).send (error);
-        
+
+            console.log(error);
+
+            res.status(500).send(error);
+
         }
-        
+
     },
 }
 
