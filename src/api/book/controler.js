@@ -83,29 +83,31 @@ const bookControler = {
                 res.status(500).send(error);
             });
     },
-    get_callback: (req, res) => { // функція з колбеками     
+    get_callback: (req, res) => { // функція з колбеками  
+        function logError(error){ //обробка помилки
+            console.log(error);
+            res.status(500).send(error);
+        }   
+
         const client = new MongoClient(url, {
             useUnifiedTopology: true
         }); // створюємо нового клієнта для підключення
         client.connect(
             (error, connection) => { // підключаємось
                 if (error) { // якщо помилка
-                    console.log(error);
-                    res.status(500).send(error);
+                    logError(error);
                 } else {
                     const books = connection.db(dbName).collection(collectiionName);
                     // вибираємо коллекцію  
                     books.find(makeQueryObject(req.query),
                         (error, result) => {
                             if (error) {
-                                console.log(error);
-                                res.status(500).send(error);
+                                logError(error);
                             } else {
                                 result.toArray(
                                     (error, result) => {
                                         if (error) {
-                                            console.log(error);
-                                            res.status(500).send(error);
+                                            logError(error);
                                         } else {
                                             connection.close();
                                             res.send(result);
