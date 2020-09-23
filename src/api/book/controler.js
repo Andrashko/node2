@@ -237,9 +237,7 @@ const bookControler = {
 
                 {
                     $set: req.body
-                }, {
-                    returnOriginal: false
-                });
+                }, );
 
             if (result.value)
 

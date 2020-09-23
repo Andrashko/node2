@@ -105,5 +105,5 @@ const bookControler = {
     }
 }
 
-bookControler.connect ();
+
 export default bookControler;
