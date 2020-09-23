@@ -1,9 +1,9 @@
 import {Router} from "express";
-import bookControler from "./controler";
+import bookControler from "./controllerMogoose";
 
 const bookRouter = new Router();
-bookRouter.get("/", bookControler.get_async);
-bookRouter.get(":/id", bookControler.getById);
+bookRouter.get("/", bookControler.get);
+bookRouter.get("/:id", bookControler.getById);
 bookRouter.post("/", bookControler.post);
 bookRouter.delete("/:id",bookControler.delete);
 bookRouter.patch("/:id", bookControler.patch);
