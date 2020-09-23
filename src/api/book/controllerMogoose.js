@@ -1,8 +1,33 @@
 import Book from "./model";
 import mongoose from "mongoose";
-//параметри бази
+function makeQueryObject(query) {
+    let result = {};
+    if (query.maxpages && query.minpages) {
+        result.pages = {
+            $and: [{
+                $lte: parseInt(query.maxpages)
+            }, {
+                $gte: parseInt(query.minpages)
+            }]
+        };
+    }
+    if (query.author) {
+        result.authors = {
+            $elemMatch: {
+                $eq: query.author
+            }
+        }
+    }
+    if (query.maxprice) {
+        result.price = {
+            $lte: parseFloat(query.maxprice)
+        }
+    }
+    return result;
+};
+
 const bookControler = {
-    connect: async () =>{
+    connect: async () =>{//параметри бази
         const dbUrl = 'mongodb://localhost:27017/bookMongooseDB';
         try {
             await  mongoose.connect(dbUrl, {
@@ -18,7 +43,7 @@ const bookControler = {
     },
     get: async (req, res) =>{
         try {
-            const books = await Book.find();
+            const books = await Book.find(makeQueryObject(req.query));
             res.send(books);
         }
         catch (error){
