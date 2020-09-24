@@ -11,5 +11,5 @@ controllerMongoose.connect().then(() => {
     server.listen(3000);
     console.log("http://localhost:3000");
 }).catch ((error)=>{
-    console.error(error)
+    console.error(error);
 });

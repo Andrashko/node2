@@ -9,7 +9,7 @@ const bookSchema = new Schema({
     isbn: String,
     published: Date,
     pages: Number,
-    price: Number
+    price:{ type: Number}
 
 });
 
