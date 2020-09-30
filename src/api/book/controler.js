@@ -123,140 +123,86 @@ const bookControler = {
         );
     },
     getById: async (req, res) => {
-
         try {
-
             const client = new MongoClient(url, {
                 useUnifiedTopology: true
             });
 
             const connection = await client.connect();
-
             const books = connection.db(dbName).collection(collectiionName);
-
             const result = await books.findOne({
                 _id: ObjectID(req.params.id)
             }); // знайти
-
             if (result) //якщо знайшло
-
                 res.send(result);
-
             else
-
                 res.status(404).send("Not Found");
-
             client.close();
-
         } catch (error) {
-
             console.log(error);
-
             res.status(500).send(error);
-
         }
-
     },
     post: async (req, res) => {
-
         try {
-
             const client = new MongoClient(url, {
                 useUnifiedTopology: true
             });
 
             const connection = await client.connect();
-
             const books = connection.db(dbName).collection(collectiionName);
-
             const result = await books.insertOne(req.body);
-
             res.send(result.ops);
-
             client.close();
-
         } catch (error) {
-
             console.log(error);
-
             res.status(500).send(error);
-
         }
-
     },
     delete: async (req, res) => {
-
         try {
-
             const client = new MongoClient(url, {
                 useUnifiedTopology: true
             });
 
             const connection = await client.connect();
-
             const books = connection.db(dbName).collection(collectiionName);
-
             const result = await books.findOneAndDelete({
                 _id: ObjectID(req.params.id)
             }, req.body);
-
             if (result)
-
                 res.send(result);
-
             else
-
                 res.status(404).send("Not Found");
-
             client.close();
-
         } catch (error) {
-
             console.log(error);
-
             res.status(500).send(error);
-
         }
-
     },
     patch: async (req, res) => {
-
         try {
-
             const client = new MongoClient(url, {
                 useUnifiedTopology: true
             });
 
             const connection = await client.connect();
-
             const books = connection.db(dbName).collection(collectiionName);
-
             const result = await books.findOneAndUpdate({
                     _id: ObjectID(req.params.id)
                 },
-
                 {
                     $set: req.body
                 }, );
-
             if (result.value)
-
                 res.send(result.value);
-
             else
-
                 res.status(404).send("Not Found");
-
             client.close();
-
         } catch (error) {
-
             console.log(error);
-
             res.status(500).send(error);
-
         }
-
     },
 }
 
