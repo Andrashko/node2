@@ -28,20 +28,7 @@ function makeQueryObject(query) {
 };
 
 const bookControler = {
-    connect: async () =>{//параметри бази
-        const dbUrl = 'mongodb://localhost:27017/bookMongooseDB';
-        try {
-            await  mongoose.connect(dbUrl, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-                useFindAndModify: false  
-            });
-            console.log("DB connected"); 
-        } catch (error){
-            console.error(error);
-            throw error;
-        }
-    },
+ 
     get: async (req, res) =>{
         try {
             const books = await Book.find(makeQueryObject(req.query));
