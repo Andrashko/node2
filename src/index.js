@@ -2,14 +2,21 @@ import express from "express";
 import mongoose from "mongoose";
 import fs from "fs";
 import https from "https";
+import dotenv from "dotenv";
+import passport from "passport";
+
 import apiRouter from "./api";
+import authRouter from "./auth";
+import setJwtStrategy from "./auth/jwtstrategy";
 
+dotenv.config();
 
-const dbUrl = 'mongodb://localhost:27017/bookMongooseDB';
+let dbUrl = process.env.DB_URL;
 const dbOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useCreateIndex: true,
 };
 mongoose.connect(dbUrl, dbOptions)
     .then(() => {
@@ -18,9 +25,14 @@ mongoose.connect(dbUrl, dbOptions)
 
             const server = express();
 
-            server.use(express.urlencoded());
+            server.use(express.urlencoded({ extended: false }));
             server.use(express.json());
+
+            server.use(passport.initialize());
+            setJwtStrategy(passport);
+
             server.use("/api", apiRouter);
+            server.use("/auth", authRouter);
 
             server.use((req, res, next) => { //переадресування всіх запитів з http з https
                 if (req.header('x-forwarded-proto') !== 'https')
@@ -29,13 +41,13 @@ mongoose.connect(dbUrl, dbOptions)
                     next();
             });
 
-            const options = {
+            const httpsOptions = {
                 key: fs.readFileSync('./secret/key.pem'),
                 cert: fs.readFileSync('./secret/cert.pem'),
                 ca: fs.readFileSync("./secret/rootCA.pem")
             };
 
-            const httpsServer = https.createServer(options, server);
+            const httpsServer = https.createServer(httpsOptions, server);
             httpsServer.listen(3443);
             console.log("https://localhost:3443");
             server.listen(3000);
@@ -48,4 +60,3 @@ mongoose.connect(dbUrl, dbOptions)
     .catch(error => {
         console.error(error);
     });
-

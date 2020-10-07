@@ -1,5 +1,4 @@
 import Book from "./model";
-import mongoose from "mongoose";
 
 function makeQueryObject(query) {
     let result = {};

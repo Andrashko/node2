@@ -4,7 +4,7 @@ const userSchema = new Schema({
     login:{
         type:String,
         required:true,
-        unique:true
+        unique:true,
     },
     password:{
         type:String,
@@ -12,4 +12,6 @@ const userSchema = new Schema({
     }
 });
 
-export default userSchema;
+const User = model("User", userSchema);
+
+export default User;
