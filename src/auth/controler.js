@@ -24,19 +24,19 @@ const userControler = {
             res.status(500).send(error);                      
         }
     },
-    login:  async (req,res) =>{
+    login:  async (req,res)=>{
         try{
             const userFound = await User.findOne({login: req.body.login});
             if (userFound) {
                 const checkPassword = await bcryptjs.compare(req.body.password, userFound.password);
                 if (checkPassword){
                     const token = jwt.sign({
-                        login:userFound.login,
-                        id:userFound._id
+                        login: userFound.login,
+                        id: userFound._id
                     }, 
                     process.env.TOKEN_SECRET,
                     {
-                        expiresIn: 60,
+                        expiresIn: 600,
                     });
                     res.send({token:token});
                 } 

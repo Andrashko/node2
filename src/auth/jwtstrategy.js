@@ -12,7 +12,7 @@ function setJwtStrategy(passport) {
                 try {
                     const user = await User.findById(payload.id);
                     if (user) {
-                        done(null, user);
+                        done(null, payload);
                     } else {
                         done(null, false)
                     }
