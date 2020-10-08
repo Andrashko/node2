@@ -12,7 +12,6 @@ const userControler = {
             else {
                 const password = req.body.password;
                 const cryptedPassword = await bcryptjs.hash(password, 10);
-                console.log(cryptedPassword) ;
                 const user = new User ({
                     login:req.body.login,
                     password:cryptedPassword,
@@ -37,7 +36,7 @@ const userControler = {
                     }, 
                     process.env.TOKEN_SECRET,
                     {
-                        expiresIn: 3600,
+                        expiresIn: 60,
                     });
                     res.send({token:token});
                 } 
