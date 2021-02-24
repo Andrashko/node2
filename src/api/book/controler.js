@@ -3,7 +3,7 @@ import {
     ObjectID
 } from 'mongodb';
 
-const url = 'mongodb://localhost:27017'; // адреса сервера
+const url = 'mongodb+srv://student:i295Anz59j94lTIE@cluster0.n9t74.gcp.mongodb.net/bookMongooseDB?retryWrites=true&w=majority'; // адреса сервера
 
 const dbName = 'bookDB'; // назва Бази даних
 

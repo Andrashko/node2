@@ -31,7 +31,7 @@ const bookControler = {
     get: async (req, res) =>{
         try {
             const books = await Book.find(makeQueryObject(req.query));
-            res.send(books);
+            setTimeout( ()=> res.send(books), 2000);
         }
         catch (error){
             console.error(error);
@@ -88,6 +88,18 @@ const bookControler = {
         catch (error){
             console.error(error);
             res.status(500).send(error);
+        }
+    },
+    put: async (req,res)=>{
+        try{
+            let arr = req.body;
+            if (arr && arr.length)
+            {
+                const books = await Book.insertMany(arr);
+                res.send(books);
+            }
+        } catch (e){
+            res.status(500).send(e);
         }
     }
 }

@@ -9,6 +9,8 @@ import apiRouter from "./api";
 import authRouter from "./auth";
 import setJwtStrategy from "./auth/jwtstrategy";
 
+import cors from "cors";
+
 dotenv.config();
 
 let dbUrl = process.env.DB_URL;
@@ -24,6 +26,8 @@ mongoose.connect(dbUrl, dbOptions)
             console.log("DB connected");
 
             const server = express();
+
+            server.use(cors());
 
             server.use(express.urlencoded({ extended: false }));
             server.use(express.json());
@@ -48,10 +52,10 @@ mongoose.connect(dbUrl, dbOptions)
             };
 
             const httpsServer = https.createServer(httpsOptions, server);
-            httpsServer.listen(3443);
-            console.log("https://localhost:3443");
-            server.listen(3000);
-            console.log("http://localhost:3000");
+            httpsServer.listen(7443);
+            console.log("https://localhost:7443");
+            server.listen(4000);
+            console.log("http://localhost:4000");
 
         } catch (e) {
             console.error(e);
