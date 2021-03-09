@@ -11,6 +11,8 @@ import setJwtStrategy from "./auth/jwtstrategy";
 
 import cors from "cors";
 
+import fileRouter from "./files";
+
 dotenv.config();
 
 let dbUrl = process.env.DB_URL;
@@ -37,6 +39,10 @@ mongoose.connect(dbUrl, dbOptions)
 
             server.use("/api", apiRouter);
             server.use("/auth", authRouter);
+            server.get("/file", express.static("files/"));
+            server.use("/file", fileRouter);
+       
+
 
             server.use((req, res, next) => { //переадресування всіх запитів з http з https
                 if (req.header('x-forwarded-proto') !== 'https')

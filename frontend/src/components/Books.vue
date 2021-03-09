@@ -1,50 +1,43 @@
-<template><div>
-  <section class="control">
-    Вибрано книгу {{ selected }}
-    <router-link to="/book/new"> Додати книгу </router-link>
-    <!-- <input type="button" value="Додат нову книгу" v-on:click="showForm" />
+<template>
+  <div>
+    <section class="control">
+      Вибрано книгу {{ selected }}
+      <router-link to="/book/new"> Додати книгу </router-link>
+      <!-- <input type="button" value="Додат нову книгу" v-on:click="showForm" />
     <input type="button" value="Редагувати книгу" v-on:click="showEditForm" />-->
-    <input type="button" value="Вилучити" v-on:click="deleteBook" />
-    <input type="button" value="Сортувати" @click="sortBooksByPrice" /> 
-    <input
-      type="text"
-      placeholder="Шукати по назві"
-      v-model="searchTitleString"
-    />
-  </section>
-  <div class="wrap">
-    <new-book-form
-      v-model="newBook"
-      @submit.prevent="addNewBook"
-      ref="newBookForm"
-    >
-    </new-book-form>
-    <new-book-form v-model="editBook" ref="editBookForm"> </new-book-form>
-
-    <ul v-if="filtredBooks.length > 0">
-      <book-template
-        v-for="b in filtredBooks"
-        :key="b.Id"
-        class="bookvie"
-        v-on:click="selectBook(b._id)"
-        v-bind:book="b"
-      >
-      </book-template>
-    </ul>
-    <p v-if="books.length == 0">Йде завантаження</p>
+      <input type="button" value="Вилучити" v-on:click="deleteBook" />
+      <input type="button" value="Сортувати" @click="sortBooksByPrice" />
+      <input
+        type="text"
+        placeholder="Шукати по назві"
+        v-model="searchTitleString"
+      />
+    </section>
+    <div class="wrap">
+      <ul v-if="filtredBooks.length > 0">
+        <book-template
+          v-for="b in filtredBooks"
+          :key="b.Id"
+          class="bookvie"
+          v-on:click="selectBook(b._id)"
+          v-bind:book="b"
+        >
+        </book-template>
+      </ul>
+      <p v-if="books.length == 0">Йде завантаження</p>
+    </div>
   </div>
-</div></template>
+</template>
 
 <script>
 import BookTemplate from "./BookTemplate.vue";
-import NewBookForm from "./NewBookForm.vue";
+
 import axios from "axios";
 
 export default {
   name: "App",
   components: {
     BookTemplate,
-    NewBookForm,
   },
   data() {
     return {
@@ -103,13 +96,15 @@ export default {
     async deleteBook() {
       // let index = this.books.findIndex((book) => book.Id == this.selected);
       // if (this.selected >= 0) this.books.splice(index, 1);
-      try{
-          let deletedBook = (await axios.delete(`https://localhost:7443/api/book/${this.selected}`)).data;
-          this.books =[];
-          alert (`Book ${deletedBook.Title} was deleted`);
-          this.books = (await axios.get("https://localhost:7443/api/book")).data;
-      } catch (err){
-          console.log(err)
+      try {
+        let deletedBook = (
+          await axios.delete(`https://localhost:7443/api/book/${this.selected}`)
+        ).data;
+        this.books = [];
+        alert(`Book ${deletedBook.Title} was deleted`);
+        this.books = (await axios.get("https://localhost:7443/api/book")).data;
+      } catch (err) {
+        console.log(err);
       }
     },
     closeForm() {

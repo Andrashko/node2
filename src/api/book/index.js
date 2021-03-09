@@ -9,6 +9,6 @@ bookRouter.get("/:id", bookControler.getById);
 bookRouter.post("/",  bookControler.post);
 bookRouter.delete("/:id",  bookControler.delete);
 bookRouter.patch("/:id",  bookControler.patch);
-// bookRouter.put("/", bookControler.put);
+bookRouter.put("/", bookControler.put);
 
 export default bookRouter;

@@ -77,7 +77,6 @@ const bookControler = {
     },
     patch: async (req, res) =>{
         try {
-            console.log(req.params.id, req.body);
             const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
                 returnOriginal: false
             } );
@@ -98,8 +97,8 @@ const bookControler = {
                 const books = await Book.insertMany(arr);
                 res.send(books);
             }
-        } catch (e){
-            res.status(500).send(e);
+        } catch (error){
+            res.status(500).send(error);
         }
     }
 }

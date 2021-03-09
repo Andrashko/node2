@@ -40,7 +40,8 @@ export default {
   methods: {
     async save() {
       try {
-        console.log(this.book);
+        // Завантажимо зображення на сервер
+
         let updatedBook = (
           await axios.patch(
             `https://localhost:7443/api/book/${this.id}`,
@@ -49,10 +50,7 @@ export default {
               Athor: this.book.Athor,
             }
           )
-        ).data;
-        
-        console.log(updatedBook);
-
+        ).data;    
         this.$router.push(`/book/${updatedBook._id}`);
       } catch (err) {
         console.log(err);
