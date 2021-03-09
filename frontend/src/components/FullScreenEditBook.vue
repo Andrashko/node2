@@ -40,17 +40,26 @@ export default {
   methods: {
     async save() {
       try {
-        // Завантажимо зображення на сервер
+        let img = new FormData();
+        img.append("image", this.book.file);
+        let uploadFile = (await axios.post(
+          `https://localhost:7443/file`,
+          img,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )).data;
+        console.log(uploadFile);
 
         let updatedBook = (
-          await axios.patch(
-            `https://localhost:7443/api/book/${this.id}`,
-            {
-              Title: this.book.Title,
-              Athor: this.book.Athor,
-            }
-          )
-        ).data;    
+          await axios.patch(`https://localhost:7443/api/book/${this.id}`, {
+            Title: this.book.Title,
+            Athor: this.book.Athor,
+            Cover: `https://localhost:7443/files/${uploadFile.filename}`
+          })
+        ).data;
         this.$router.push(`/book/${updatedBook._id}`);
       } catch (err) {
         console.log(err);
@@ -58,7 +67,8 @@ export default {
     },
     selectCover(event) {
       const cover = event.target.files[0];
-      this.newBook.Cover = URL.createObjectURL(cover);
+      this.book.file = event.target.files[0];
+      this.book.Cover = URL.createObjectURL(cover);
     },
   },
 };

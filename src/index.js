@@ -39,9 +39,9 @@ mongoose.connect(dbUrl, dbOptions)
 
             server.use("/api", apiRouter);
             server.use("/auth", authRouter);
-            server.get("/file", express.static("files/"));
             server.use("/file", fileRouter);
-       
+            
+            server.use("/files", express.static("files/"));
 
 
             server.use((req, res, next) => { //переадресування всіх запитів з http з https
