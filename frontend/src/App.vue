@@ -1,10 +1,11 @@
 <template>
-  <nav>
-    <router-link to="/"> Додому </router-link>
-    <router-link to="/about"> про автора </router-link>
-    <router-link to="/chart">Графік </router-link>
-  </nav>
-  <router-view></router-view>
+  <div>
+    <nav>
+      <router-link to="/"> Додому </router-link>
+      <router-link to="/about"> про автора </router-link>
+    </nav>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>

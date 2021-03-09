@@ -24,6 +24,8 @@ export default {
   },
   methods: {
     truncTitle(title, len) {
+      if (!title)
+        return "No title";
       if (title.length > len) return title.substring(0, len) + "...";
       else return title;
     },
@@ -34,7 +36,7 @@ export default {
       return "⋆".repeat(count);
     },
     showDetailPage(){
-      this.$router.push(`/book/${this.book.Id}`);
+      this.$router.push(`/book/${this.book._id}`);
     }
 
   },

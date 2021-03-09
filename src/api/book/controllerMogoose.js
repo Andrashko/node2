@@ -31,7 +31,7 @@ const bookControler = {
     get: async (req, res) =>{
         try {
             const books = await Book.find(makeQueryObject(req.query));
-            setTimeout( ()=> res.send(books), 2000);
+            res.send(books);
         }
         catch (error){
             console.error(error);
@@ -77,7 +77,8 @@ const bookControler = {
     },
     patch: async (req, res) =>{
         try {
-            const book = await Book.findOneAndUpdate(req.params.id, req.body, {
+            console.log(req.params.id, req.body);
+            const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
                 returnOriginal: false
             } );
             if (book) 
@@ -86,7 +87,6 @@ const bookControler = {
                 res.status(404).send("Not Found");             
         }
         catch (error){
-            console.error(error);
             res.status(500).send(error);
         }
     },

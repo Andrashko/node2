@@ -27,14 +27,6 @@ export default {
     };
   },
   async mounted() {
-    // let book = Storage.books.find((book) => book.Id == Number(this.id));
-    // if (book){
-    //     this.book = book;
-    //     this.correctId = true;
-    // }
-    // else
-    //     this.correctId = false;
-
     try {
       let book = (await axios.get(`https://localhost:7443/api/book/${this.id}`))
         .data;
@@ -53,11 +45,13 @@ export default {
           await axios.patch(
             `https://localhost:7443/api/book/${this.id}`,
             {
-              Title:this.book.Title,
+              Title: this.book.Title,
               Athor: this.book.Athor,
             }
           )
         ).data;
+        
+        console.log(updatedBook);
 
         this.$router.push(`/book/${updatedBook._id}`);
       } catch (err) {

@@ -12,7 +12,7 @@
   </form>
 </template>
 <script>
-//import Storage from "../storage";
+
 import axios from "axios";
 export default {
   data() {
@@ -30,9 +30,6 @@ export default {
   },
   methods: {
     async save() {
-      // let newBook = Object.assign({}, this.book);
-      // newBook.Id = Date.now();
-      // Storage.books.push(newBook);
       try{
         let newBook = (await axios.post("https://localhost:7443/api/book", this.book)).data ;
         this.$router.push(`/book/${newBook._id}`);
