@@ -52,6 +52,14 @@ const userControler = {
             res.status(500).send(error);                      
         }
     },
+    check: async (req, res)=>{
+        try{
+            res.send(req.user);
+        } catch  (error){
+            console.error(error);  
+            res.status(500).send(error);   
+        }
+    }
 }
 
 export default userControler;

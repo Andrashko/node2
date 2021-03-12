@@ -41,7 +41,7 @@ export default {
     },
     selectCover(event) {
       const cover = event.target.files[0];
-      this.newBook.Cover = URL.createObjectURL(cover);
+      this.book.Cover = URL.createObjectURL(cover);
     },
   },
 };
