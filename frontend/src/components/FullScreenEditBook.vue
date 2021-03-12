@@ -42,23 +42,29 @@ export default {
       try {
         let img = new FormData();
         img.append("image", this.book.file);
-        let uploadFile = (await axios.post(
-          `https://localhost:7443/file`,
-          img,
-          {
+        let uploadFile = (
+          await axios.post(`https://localhost:7443/file`, img, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-          }
-        )).data;
-        console.log(uploadFile);
-
-        let updatedBook = (
-          await axios.patch(`https://localhost:7443/api/book/${this.id}`, {
-            Title: this.book.Title,
-            Athor: this.book.Athor,
-            Cover: `https://localhost:7443/files/${uploadFile.filename}`
           })
+        ).data;
+        console.log(uploadFile);
+        const token = localStorage.getItem("token");
+        let updatedBook = (
+          await axios.patch(
+            `https://localhost:7443/api/book/${this.id}`,
+            {
+              Title: this.book.Title,
+              Athor: this.book.Athor,
+              Cover: `https://localhost:7443/files/${uploadFile.filename}`,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
         ).data;
         this.$router.push(`/book/${updatedBook._id}`);
       } catch (err) {

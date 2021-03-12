@@ -24,7 +24,7 @@ const userControler = {
             res.status(500).send(error);                      
         }
     },
-    login:  async (req,res)=>{
+    login: async (req, res)=>{
         try{
             const userFound = await User.findOne({login: req.body.login});
             if (userFound) {

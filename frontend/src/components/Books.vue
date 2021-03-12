@@ -31,7 +31,7 @@
 
 <script>
 import BookTemplate from "./BookTemplate.vue";
-
+import storage from "./../storage";
 import axios from "axios";
 
 export default {
@@ -94,15 +94,24 @@ export default {
       } else alert("Виберіть книгу");
     },
     async deleteBook() {
-      // let index = this.books.findIndex((book) => book.Id == this.selected);
-      // if (this.selected >= 0) this.books.splice(index, 1);
       try {
-        let deletedBook = (
-          await axios.delete(`https://localhost:7443/api/book/${this.selected}`)
-        ).data;
-        this.books = [];
-        alert(`Book ${deletedBook.Title} was deleted`);
-        this.books = (await axios.get("https://localhost:7443/api/book")).data;
+        if (storage.token) {
+          let deletedBook = (
+            await axios.delete(
+              `https://localhost:7443/api/book/${this.selected}`,
+              {
+                headers:{
+                  "Authorization": `Bearer ${storage.token}`
+                }
+              }
+            )
+          ).data;
+          this.books = [];
+          alert(`Book ${deletedBook.Title} was deleted`);
+          this.books = (
+            await axios.get("https://localhost:7443/api/book")
+          ).data;
+        }
       } catch (err) {
         console.log(err);
       }
