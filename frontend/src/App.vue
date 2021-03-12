@@ -5,7 +5,6 @@
       <router-link to="/about"> Про автора </router-link>
       <h3 v-if="storage.login"> {{storage.login}} </h3>
       <router-link to="/signin" v-else> Увійти </router-link>
-
     </nav>
     <router-view></router-view>
   </div>
@@ -13,12 +12,15 @@
 
 <script>
 import storage from "./storage";
+import {reactive} from "vue";
 
 export default {
   name: "App",
   data() {
+    const _storage = reactive(storage);
     return {
-      storage: storage
+      
+      storage: _storage
     };
   }
 };

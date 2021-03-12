@@ -1,7 +1,6 @@
 <template>
   <div>
     <section class="control">
-      Вибрано книгу {{ selected }}
       <router-link to="/book/new"> Додати книгу </router-link>
       <!-- <input type="button" value="Додат нову книгу" v-on:click="showForm" />
     <input type="button" value="Редагувати книгу" v-on:click="showEditForm" />-->
@@ -100,9 +99,9 @@ export default {
             await axios.delete(
               `https://localhost:7443/api/book/${this.selected}`,
               {
-                headers:{
-                  "Authorization": `Bearer ${storage.token}`
-                }
+                headers: {
+                  Authorization: `Bearer ${storage.token}`,
+                },
               }
             )
           ).data;

@@ -27,6 +27,7 @@ export default {
                 })).data.token;
                 storage.token = token;
                 storage.signIn = true;
+                storage.login = this.login;
                 localStorage.setItem("token", token);
                 this.$router.push("/");
             } catch (error){
