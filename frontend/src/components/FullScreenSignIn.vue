@@ -7,8 +7,7 @@
 </template>
 
 <script>
-import axios from "axios";
-import storage from "../storage";
+import auth from "./../auth";
 
 export default {
     name:"FullScreenSignIn",
@@ -21,13 +20,7 @@ export default {
     methods:{
         async signIn(){
             try{
-                const token =  (await axios.post("https://localhost:7443/auth/login", {
-                    login:  this.login,
-                    password: this.password
-                })).data.token;
-                storage.token = token;
-                storage.signIn = true;
-                localStorage.setItem("token", token);
+                await auth.signIn(this.login, this.password);
                 this.$router.push("/");
             } catch (error){
                 if (error.response.status == 404){

@@ -15,6 +15,7 @@
 <script>
 // import Storage from "../storage";
 import axios from "axios";
+import networking from '../networking';
 
 export default {
   props: {
@@ -40,16 +41,8 @@ export default {
   methods: {
     async save() {
       try {
-        let img = new FormData();
-        img.append("image", this.book.file);
-        let uploadFile = (
-          await axios.post(`https://localhost:7443/file`, img, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-        ).data;
-        console.log(uploadFile);
+        let uploadFile = await networking.UploadImage(this.book.file); 
+
         const token = localStorage.getItem("token");
         let updatedBook = (
           await axios.patch(
