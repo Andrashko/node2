@@ -25,12 +25,14 @@
       </ul>
       <p v-if="books.length == 0">Йде завантаження</p>
     </div>
+
   </div>
 </template>
 
 <script>
 import BookTemplate from "./BookTemplate.vue";
 import storage from "./../storage";
+import networking from "./../networking";
 import axios from "axios";
 
 export default {
@@ -55,11 +57,8 @@ export default {
     };
   },
   async mounted() {
-    try {
-      this.books = (await axios.get("https://localhost:7443/api/book")).data;
-    } catch (err) {
-      console.log(err);
-    }
+  
+      this.books = await networking.getBooksList();
   },
   methods: {
     sortBooksByPrice() {
