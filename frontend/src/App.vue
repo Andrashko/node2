@@ -9,6 +9,7 @@
       </p3>
       <router-link to="/signin" v-else> Увійти </router-link>
     </nav>
+    <message> </message>
     <router-view></router-view>
   </div>
 </template>
@@ -16,6 +17,7 @@
 <script>
 import storage from "./storage";
 import auth from "./auth";
+import Message from "./components/Message";
 
 export default {
   name: "App",
@@ -28,6 +30,10 @@ export default {
     sign_out(){
       auth.signOut();
     }
+  },
+  components:{
+  
+    Message
   }
 };
 </script>
