@@ -1,10 +1,7 @@
 <template>
   <div>
     <section class="control">
-      Вибрано книгу {{ selected }}
       <router-link to="/book/new"> Додати книгу </router-link>
-      <!-- <input type="button" value="Додат нову книгу" v-on:click="showForm" />
-    <input type="button" value="Редагувати книгу" v-on:click="showEditForm" />-->
       <input type="button" value="Вилучити" v-on:click="deleteBook" />
       <input type="button" value="Сортувати" @click="sortBooksByPrice" />
       <input
