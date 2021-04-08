@@ -8,7 +8,7 @@
 
 <script>
 import auth from "./../auth";
-import {mapMutations} from "vuex";
+import { mapMutations } from "vuex";
 
 export default {
   name: "FullScreenSignIn",
@@ -26,7 +26,7 @@ export default {
         this.$router.push("/");
       } catch (error) {
         if (error.response.status == 404) {
-        this.addMessage( {
+          this.addMessage({
             title: "Помилка входу",
             text: "Невірний логін або пароль",
           });

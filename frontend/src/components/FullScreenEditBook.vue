@@ -13,7 +13,7 @@
   <p v-else>Невірний id</p>
 </template>
 <script>
-// import Storage from "../storage";
+
 import axios from "axios";
 import networking from '../networking';
 

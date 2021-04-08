@@ -12,8 +12,8 @@
   </form>
 </template>
 <script>
-
-import axios from "axios";
+import { mapActions } from "vuex";
+import networking from "../networking.js";
 export default {
   data() {
     return {
@@ -29,15 +29,26 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["showMessageForTime"]),
     async save() {
-      try{
-        let newBook = (await axios.post("https://localhost:7443/api/book", this.book)).data ;
-        this.$router.push(`/book/${newBook._id}`);
+      try {
+        let newBook = await networking.postBook(this.book);
+        console.log(newBook);
+        if (newBook) {
+          const message = {
+            text: `Книга ${this.book.Title} додана`,
+            title: "успіх",
+          };
+          this.showMessageForTime({
+            message: message,
+            timeout: 3000,
+          });
+
+          this.$router.push(`/book/${newBook._id}`);
+        }
+      } catch (err) {
+        console.error(err);
       }
-      catch (err){
-        console.log(err);
-      }
-      
     },
     selectCover(event) {
       const cover = event.target.files[0];

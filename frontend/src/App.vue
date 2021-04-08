@@ -3,8 +3,8 @@
     <nav>
       <router-link to="/"> Додому </router-link>
       <router-link to="/about"> Про автора </router-link>
-      <p3 v-if="storage.login">
-        Ви увійшли як <b>{{ storage.login }}</b>
+      <p3 v-if="storage2.login">
+        Ви увійшли як <b>{{ storage2.login }}</b>
         <input type="button" value="вийти" @click="sign_out"/>
       </p3>
       <router-link to="/signin" v-else> Увійти </router-link>
@@ -15,16 +15,15 @@
 </template>
 
 <script>
-import storage from "./storage";
-
 import auth from "./auth";
 import Message from "./components/Message";
+import storage2 from "./storage";
 
 export default {
   name: "App",
   data() {
     return {
-      storage: storage,
+      storage2
     };
   },
   methods:{
@@ -33,7 +32,6 @@ export default {
     }
   },
   components:{
-  
     Message
   }
 };

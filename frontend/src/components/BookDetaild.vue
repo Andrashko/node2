@@ -7,7 +7,6 @@
 </template>
 
 <script>
-//import Storage from "../storage";
 import axios from "axios";
 
 export default {
@@ -23,9 +22,7 @@ export default {
             }
         }
     },
-    async mounted(){
-        
-        //this.book = Storage.books.find(book => book.Id == Number(this.id));
+    async mounted(){      
         try{
             let url = `https://localhost:7443/api/book/${this.id}`;
             this.book = (await axios.get(url)).data;

@@ -2,8 +2,6 @@
   <div>
     <section class="control">
       <router-link to="/book/new"> Додати книгу </router-link>
-      <!-- <input type="button" value="Додат нову книгу" v-on:click="showForm" />
-    <input type="button" value="Редагувати книгу" v-on:click="showEditForm" />-->
       <input type="button" value="Вилучити" v-on:click="deleteBook" />
       <input type="button" value="Сортувати" @click="sortBooksByPrice" />
       <input
@@ -31,7 +29,6 @@
 
 <script>
 import BookTemplate from "./BookTemplate.vue";
-import storage from "./../storage";
 import networking from "./../networking";
 import axios from "axios";
 
@@ -56,8 +53,7 @@ export default {
       editBook: {},
     };
   },
-  async mounted() {
-  
+  async mounted() {  
       this.books = await networking.getBooksList();
   },
   methods: {
@@ -93,13 +89,14 @@ export default {
     },
     async deleteBook() {
       try {
-        if (storage.token) {
+        const token = localStorage.getItem("token");
+        if (token) {
           let deletedBook = (
             await axios.delete(
               `https://localhost:7443/api/book/${this.selected}`,
               {
                 headers: {
-                  Authorization: `Bearer ${storage.token}`,
+                  Authorization: `Bearer ${token}`,
                 },
               }
             )

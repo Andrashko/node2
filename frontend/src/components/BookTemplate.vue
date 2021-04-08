@@ -24,8 +24,7 @@ export default {
   },
   methods: {
     truncTitle(title, len) {
-      if (!title)
-        return "No title";
+      if (!title) return "No title";
       if (title.length > len) return title.substring(0, len) + "...";
       else return title;
     },
@@ -35,18 +34,18 @@ export default {
     stars(count) {
       return "⋆".repeat(count);
     },
-    showDetailPage(){
+    showDetailPage() {
       this.$router.push(`/book/${this.book._id}`);
-    }
-
+    },
   },
-  computed:{
-    shortTitle (){
+  computed: {
+    shortTitle() {
       const len = 20;
-       if (this.book.Title.length > len) return this.book.Title.substring(0, len) + "...";
+      if (this.book.Title.length > len)
+        return this.book.Title.substring(0, len) + "...";
       else return this.book.Title;
-    }
-  }
+    },
+  },
 };
 </script>
 

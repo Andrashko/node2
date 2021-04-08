@@ -36,7 +36,7 @@ const userControler = {
                     }, 
                     process.env.TOKEN_SECRET,
                     {
-                        expiresIn: 600,
+                        expiresIn: 6000,
                     });
                     res.send({token:token});
                 } 
