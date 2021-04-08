@@ -23,7 +23,6 @@ import Message from "./components/Message";
 export default {
   name: "App",
   data() {
-    const _storage = reactive(storage);
     return {
       storage: storage,
     };
