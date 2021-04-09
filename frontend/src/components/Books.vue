@@ -30,7 +30,7 @@
 <script>
 import BookTemplate from "./BookTemplate.vue";
 import networking from "./../networking";
-import axios from "axios";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "App",
@@ -55,8 +55,10 @@ export default {
   },
   async mounted() {  
       this.books = await networking.getBooksList();
+      await this.loadBooks();
   },
   methods: {
+    ...mapActions(["showMessageForTime", "loadBooks"]),
     sortBooksByPrice() {
       this.books.sort((book1, book2) => (book1.Price > book2.Price ? 1 : -1));
     },
@@ -89,24 +91,17 @@ export default {
     },
     async deleteBook() {
       try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          let deletedBook = (
-            await axios.delete(
-              `https://localhost:7443/api/book/${this.selected}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            )
-          ).data;
-          this.books = [];
-          alert(`Book ${deletedBook.Title} was deleted`);
-          this.books = (
-            await axios.get("https://localhost:7443/api/book")
-          ).data;
-        }
+          let deletedBook = await networking.deleteBook(this.selected);
+          if (deletedBook){
+            this.showMessageForTime({
+              message:{
+                title:"Delete",
+                text:`Book ${deletedBook.Title} was deleted`
+              },
+              timeout: 5000
+            })
+            this.books = await networking.getBooksList();
+          }
       } catch (err) {
         console.log(err);
       }
@@ -116,6 +111,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(["Books"]),
     sortedBooks() {
       function CompareBooks(book1, book2) {
         if (book1.Price > book2.Price) return 1;
@@ -124,7 +120,8 @@ export default {
         if (book1.Title < book2.Title) return -1;
         return 0;
       }
-      return [...this.books].sort(CompareBooks);
+      console.log(this.Books);
+      return [...this.Books].sort(CompareBooks);
     },
     filtredBooks() {
       if (this.searchTitleString == "") return this.sortedBooks;

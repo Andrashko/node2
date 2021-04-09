@@ -3,6 +3,17 @@ import store from "./store";
 
 const baseUrl = "https://localhost:7443";
 
+function ShowErrorMessage (err){
+  console.error(err);
+      store.dispatch("showMessageForTime", {
+        message: {
+          title: err.name,
+          text: err.message
+        },
+        timeout: 10000
+      });
+}
+
 export default {
   async getBooksList() {
     try {
@@ -12,6 +23,31 @@ export default {
       console.log(err);
       return [];
     }
+  },
+
+  async deleteBook(id)
+  {
+    try{
+      const token = store.state.token;
+      if (token) {
+        let deletedBook = (
+          await axios.delete(
+              `${baseUrl}/api/book/${id}`,
+              {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+        ).data;
+        return deletedBook;
+        }
+      return null;
+      }
+      catch(err){
+        ShowErrorMessage(err);
+        return null;
+      }
   },
   async UploadImage(image) {
     try {
