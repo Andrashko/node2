@@ -12,8 +12,8 @@
   </form>
 </template>
 <script>
-import { mapActions } from "vuex";
-import networking from "../networking.js";
+import { mapActions, mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -28,15 +28,18 @@ export default {
       },
     };
   },
+  computed:{
+    ...mapState(["Book"])
+  },
   methods: {
-    ...mapActions(["showMessageForTime"]),
+    ...mapActions(["showMessageForTime", "addBook"]),
     async save() {
       try {
-        let newBook = await networking.postBook(this.book);
-        console.log(newBook);
-        if (newBook) {
+        await this.addBook(this.book);
+        console.log(this.Book);
+        if (this.Book) {
           const message = {
-            text: `Книга ${this.book.Title} додана`,
+            text: `Книга ${this.Book.Title} додана`,
             title: "успіх",
           };
           this.showMessageForTime({
@@ -44,7 +47,7 @@ export default {
             timeout: 3000,
           });
 
-          this.$router.push(`/book/${newBook._id}`);
+          this.$router.push(`/book/${this.Book._id}`);
         }
       } catch (err) {
         console.error(err);

@@ -80,5 +80,24 @@ export default {
       });
       return null;
     }
+  },
+
+  async getLoginByToken(token){
+    try{
+      const user = (await axios.get(`${baseUrl}/auth`,  
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
+      )).data;
+      if (user.login)
+      {
+        return user.login;
+      }
+    } catch (err){
+      console.log(err);
+      return null;
+    }
   }
 }

@@ -11,7 +11,8 @@ const store = createStore({
         login:"",
         signIn:false,
 
-        Books:[]
+        Books:[],
+        Book: null
     },
     getters:{
         messageCount({messages}){
@@ -38,9 +39,19 @@ const store = createStore({
         setSignIn(state, signIn){
             state.signIn = signIn;
         },
-
         setBooks(state, books){
             state.Books = books;
+        },
+        addBook(state, book){
+            state.Books.push(book);
+        },
+        setBook(state, book){
+            state.Book = book;
+        },
+        removeBook({Books}, book){
+            const index = Books.findIndex(b=>b._id == book._id);
+            if (index>=0)
+                Books.splice(index, 1);
         }
     },
     actions:{
@@ -56,9 +67,28 @@ const store = createStore({
             localStorage.setItem("token", token);
         },
 
-        loadTokenFromLocalStorage({commit}){
+        async loadTokenFromLocalStorage({commit, dispatch}){
             const token =  localStorage.getItem("token");
-            commit("setToken", token);
+            const login = await networking.getLoginByToken(token);
+            if (login){
+                commit("setToken", token);
+                dispatch("logIn", login);
+                dispatch("showMessageForTime", {
+                    message:{
+                        tittle:"Login",
+                        text:`Welcome ${login}`
+                    },
+                    timeout: 3000
+                });
+            }
+            else 
+                dispatch("showMessageForTime", {
+                    message:{
+                        tittle:"Error",
+                        text:"Wrong token"
+                    },
+                    timeout: 1000
+                });
         },
         removeToken({commit}){
             commit("setToken", "");
@@ -76,6 +106,25 @@ const store = createStore({
         async loadBooks({commit}){
             const books = await networking.getBooksList();
             commit ("setBooks", books);
+        }, 
+
+        async addBook({commit}, book){
+            let newBook = await networking.postBook(book);
+            if (newBook){
+                commit("addBook", newBook);
+                commit("setBook", newBook);
+            } 
+            else
+                commit("setBook", null);
+        }, 
+        async deleteBookById({commit}, id){
+            let deletedBook = await networking.deleteBook(id);
+            if (deletedBook){
+                commit("setBook", deletedBook);
+                commit("removeBook", deletedBook);
+            }
+            else
+                commit("setBook", null);
         }
     }
 });

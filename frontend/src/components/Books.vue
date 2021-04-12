@@ -58,7 +58,7 @@ export default {
       await this.loadBooks();
   },
   methods: {
-    ...mapActions(["showMessageForTime", "loadBooks"]),
+    ...mapActions(["showMessageForTime", "loadBooks", "deleteBookById"]),
     sortBooksByPrice() {
       this.books.sort((book1, book2) => (book1.Price > book2.Price ? 1 : -1));
     },
@@ -91,16 +91,15 @@ export default {
     },
     async deleteBook() {
       try {
-          let deletedBook = await networking.deleteBook(this.selected);
-          if (deletedBook){
+          await this.deleteBookById(this.selected);
+          if (this.Book){
             this.showMessageForTime({
               message:{
                 title:"Delete",
-                text:`Book ${deletedBook.Title} was deleted`
+                text:`Book ${this.Book.Title} was deleted`
               },
               timeout: 5000
-            })
-            this.books = await networking.getBooksList();
+            });
           }
       } catch (err) {
         console.log(err);
@@ -111,7 +110,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["Books"]),
+    ...mapState(["Books", "Book"]),
     sortedBooks() {
       function CompareBooks(book1, book2) {
         if (book1.Price > book2.Price) return 1;
