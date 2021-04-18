@@ -14,6 +14,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import { showMessage, showErrorMessage } from "@/messaging";
+import networking from "@/networking";
 
 export default {
   data() {
@@ -36,11 +37,15 @@ export default {
     ...mapActions(["addBook"]),
     async save() {
       try {
-        await this.addBook(this.book);
-        console.log(this.Book);
-        if (this.Book) {
-          showMessage("успіх", `Книга ${this.Book.Title} додана`);
-          this.$router.push(`/book/${this.Book._id}`);
+        if (this.book.file) {
+          const file = await networking.uploadImage(this.book.file);
+          const baseUrl = "https://localhost:7443";
+          this.book.Cover = `${baseUrl}/files/${file.filename}`;
+        }
+        const newBook = await this.addBook(this.book);
+        if (newBook) {
+          showMessage("успіх", `Книга ${newBook.Title} додана`);
+          this.$router.push(`/book/${newBook._id}`);
         }
       } catch (err) {
         showErrorMessage(err);
@@ -48,6 +53,7 @@ export default {
     },
     selectCover(event) {
       const cover = event.target.files[0];
+      this.book.file = cover;
       this.book.Cover = URL.createObjectURL(cover);
     },
   },

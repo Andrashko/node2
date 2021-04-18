@@ -39,7 +39,10 @@ const Router = createRouter({
         },
         {
             path: "/book/new",
-            component: NewForm
+            component: NewForm,
+            meta: {
+                needAuthentification: true
+            }
         },
         {
             path: "/signin",

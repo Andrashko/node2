@@ -13,9 +13,9 @@
   <p v-else>Невірний id</p>
 </template>
 <script>
-
-import axios from "axios";
-import networking from '../networking';
+import { mapActions } from "vuex";
+import networking from "@/networking";
+import { showMessage } from "@/messaging";
 
 export default {
   props: {
@@ -28,45 +28,29 @@ export default {
     };
   },
   async mounted() {
-    try {
-      let book = (await axios.get(`https://localhost:7443/api/book/${this.id}`))
-        .data;
-      this.book = book;
-      this.correctId = true;
-    } catch (err) {
-      this.correctId = false;
-      console.log(err);
-    }
+    this.book = await networking.getBookById(this.id);
+    if (this.book) this.correctId = true;
+    else this.correctId = false;
   },
-  methods: {
-    async save() {
-      try {
-        let uploadFile = await networking.UploadImage(this.book.file); 
 
-        const token = localStorage.getItem("token");
-        let updatedBook = (
-          await axios.patch(
-            `https://localhost:7443/api/book/${this.id}`,
-            {
-              Title: this.book.Title,
-              Athor: this.book.Athor,
-              Cover: `https://localhost:7443/files/${uploadFile.filename}`,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-        ).data;
-        this.$router.push(`/book/${updatedBook._id}`);
-      } catch (err) {
-        console.log(err);
+  methods: {
+    ...mapActions(["updateBook"]),
+    async save() {
+      this.book._id = this.id;
+      if (this.book.file) {
+        const file = await networking.uploadImage(this.book.file);
+        const baseUrl = "https://localhost:7443";
+        this.book.Cover =`${baseUrl}/files/${file.filename}`;
+      }
+      const updatedbook = await this.updateBook(this.book);
+      if (updatedbook) {
+        showMessage("Успіх", `Успішно оновлено ${updatedbook.Title}`);
+        this.$router.push(`/book/${updatedbook._id}`);
       }
     },
     selectCover(event) {
       const cover = event.target.files[0];
-      this.book.file = event.target.files[0];
+      this.book.file = cover;
       this.book.Cover = URL.createObjectURL(cover);
     },
   },

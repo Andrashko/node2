@@ -18,20 +18,19 @@ export default {
     async deleteBook(id) {
         try {
             const token = store.state.token;
-            if (token) {
-                let deletedBook = (
-                    await axios.delete(
-                        `${baseUrl}/api/book/${id}`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                        }
-                    )
-                ).data;
-                return deletedBook;
-            }
-            return null;
+            if (!token)
+                return null;
+            let deletedBook = (
+                await axios.delete(
+                    `${baseUrl}/api/book/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                )
+            ).data;
+            return deletedBook;
         }
         catch (err) {
             showErrorMessage(err);
@@ -41,11 +40,55 @@ export default {
 
     async postBook(book) {
         try {
-            let newBook = (await axios.post(`${baseUrl}/api/book`, book)).data;
+            const token = store.state.token;
+            if (!token)
+                return null;
+            let newBook = (await axios.post(
+                `${baseUrl}/api/book`,
+                book,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )).data;
             return newBook;
         } catch (err) {
             showErrorMessage(err);
             return null;
         }
     },
+
+    async getBookById(id) {
+        try {
+            let book = (await axios.get(`${baseUrl}/api/book/${id}`)).data;
+            return book;
+        } catch (err) {
+            showErrorMessage(err);
+            return null;
+        }
+    },
+
+    async patchBook(book, id) {
+        try {
+            const token = store.state.token;
+            if (!token)
+                return null;
+            let updatedBook = (
+                await axios.patch(
+                    `${baseUrl}/api/book/${id}`,
+                    book,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                )
+            ).data;
+            return updatedBook;
+        } catch (err) {
+            showErrorMessage(err);
+            return null;
+        }
+    }
 }

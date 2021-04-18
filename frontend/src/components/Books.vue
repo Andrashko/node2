@@ -21,15 +21,15 @@
         >
         </book-template>
       </ul>
-      <p v-if="filtredBooks.length == 0"> Нема книг для показу </p>
+      <p v-if="filtredBooks.length == 0">Нема книг для показу</p>
     </div>
-
   </div>
 </template>
 
 <script>
 import BookTemplate from "./BookTemplate.vue";
-import {mapActions, mapState} from "vuex";
+import { mapActions, mapState } from "vuex";
+import { showMessage } from "@/messaging";
 
 export default {
   name: "App",
@@ -42,38 +42,27 @@ export default {
       selected: null,
     };
   },
-  async mounted() {  
-      await this.loadBooks();
-      console.log(this.Books);
+  async mounted() {
+    await this.loadBooks();
+    console.log(this.Books);
   },
   methods: {
     ...mapActions(["showMessageForTime", "loadBooks", "deleteBookById"]),
-  
+
     selectBook(id) {
       this.selected = id;
     },
-    
+
     async deleteBook() {
-      try {
-          await this.deleteBookById(this.selected);
-          if (this.Book){
-            this.showMessageForTime({
-              message:{
-                title:"Delete",
-                text:`Book ${this.Book.Title} was deleted`
-              },
-              timeout: 5000
-            });
-          }
-      } catch (err) {
-        console.log(err);
-      }
+      const deletedBook = await this.deleteBookById(this.selected);
+      if (deletedBook)
+        showMessage("Успішне вилученн", `Книга ${deletedBook.Title} вилуучена`);
     },
   },
   computed: {
     ...mapState(["Books", "Book"]),
-    areSomeBooks(){
-      return this.Books.length>0;
+    areSomeBooks() {
+      return this.Books.length > 0;
     },
     sortedBooks() {
       function CompareBooks(book1, book2) {
