@@ -15,8 +15,8 @@ export default {
         store.dispatch("removeToken");
     },
     async ckeckSignInStatus() {
-        const login = await networking.getLoginByToken(store.state.token);    
-        if (!login || login != store.state.login) {
+        const login = await networking.getLoginByToken(store.getters.token);    
+        if (!login || login != store.getters.login) {
             showMessage("Error", "Wrong token");
             store.dispatch("logOut");
             return false;
@@ -26,7 +26,7 @@ export default {
     async restoreSignInStatus() {
         try {
             store.dispatch("loadToken");
-            const login = await networking.getLoginByToken(store.state.token);
+            const login = await networking.getLoginByToken(store.getters.token);
             if (login){
                 store.dispatch("logIn", login);
                 showMessage("Login", `Welcome ${login}`);
