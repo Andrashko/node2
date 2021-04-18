@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import auth from "./../auth";
+import auth from "../auth";
 import { mapMutations } from "vuex";
 
 export default {

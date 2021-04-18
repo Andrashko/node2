@@ -13,6 +13,7 @@
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
+import { showMessage, showErrorMessage } from "@/messaging";
 
 export default {
   data() {
@@ -28,29 +29,21 @@ export default {
       },
     };
   },
-  computed:{
-    ...mapState(["Book"])
+  computed: {
+    ...mapState(["Book"]),
   },
   methods: {
-    ...mapActions(["showMessageForTime", "addBook"]),
+    ...mapActions(["addBook"]),
     async save() {
       try {
         await this.addBook(this.book);
         console.log(this.Book);
         if (this.Book) {
-          const message = {
-            text: `Книга ${this.Book.Title} додана`,
-            title: "успіх",
-          };
-          this.showMessageForTime({
-            message: message,
-            timeout: 3000,
-          });
-
+          showMessage("успіх", `Книга ${this.Book.Title} додана`);
           this.$router.push(`/book/${this.Book._id}`);
         }
       } catch (err) {
-        console.error(err);
+        showErrorMessage(err);
       }
     },
     selectCover(event) {

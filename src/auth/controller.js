@@ -2,7 +2,7 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "./model";
 
-const userControler = {
+const authController = {
     register: async (req, res)=>{
         try{
             const userFound = await User.findOne({login: req.body.login});
@@ -62,4 +62,4 @@ const userControler = {
     }
 }
 
-export default userControler;
+export default authController;

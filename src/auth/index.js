@@ -1,10 +1,10 @@
 import {Router} from "express";
-import authControler from "./controler";
+import authController from "./controller";
 import passport from "passport";
 
 const authRouter = new Router();
-authRouter.post("/register", authControler.register);
-authRouter.post("/login", authControler.login);
-authRouter.get("/", passport.authenticate("jwt", {session:false}), authControler.check);
+authRouter.post("/register", authController.register);
+authRouter.post("/login", authController.login);
+authRouter.get("/", passport.authenticate("jwt", {session:false}), authController.check);
 
 export default authRouter;

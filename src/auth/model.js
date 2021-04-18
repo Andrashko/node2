@@ -1,16 +1,16 @@
-import {Schema, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema({
-    login:{
-        type:String,
-        required:true,
-        unique:true,
-        minlength:1
+    login: {
+        type: String,
+        required: true,
+        unique: true,
+        minlength: 1
     },
-    password:{
-        type:String,
-        required:true,
-        minlength:1
+    password: {
+        type: String,
+        required: true,
+        minlength: 1
     }
 });
 

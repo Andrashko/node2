@@ -6,10 +6,10 @@ const store = createStore({
         messages: [
         ],
 
-        token:"",
+        token: "",
 
-        login:"",
-        signIn:false,
+        login: "",
+        signIn: false,
 
         Books:[],
         Book: null
@@ -66,29 +66,9 @@ const store = createStore({
             commit("setToken", token);
             localStorage.setItem("token", token);
         },
-
-        async loadTokenFromLocalStorage({commit, dispatch}){
+        loadToken({dispatch}){
             const token =  localStorage.getItem("token");
-            const login = await networking.getLoginByToken(token);
-            if (login){
-                commit("setToken", token);
-                dispatch("logIn", login);
-                dispatch("showMessageForTime", {
-                    message:{
-                        tittle:"Login",
-                        text:`Welcome ${login}`
-                    },
-                    timeout: 3000
-                });
-            }
-            else 
-                dispatch("showMessageForTime", {
-                    message:{
-                        tittle:"Error",
-                        text:"Wrong token"
-                    },
-                    timeout: 1000
-                });
+            dispatch ("setToken", token);
         },
         removeToken({commit}){
             commit("setToken", "");
@@ -125,7 +105,9 @@ const store = createStore({
             }
             else
                 commit("setBook", null);
-        }
+        },
+
+
     }
 });
 

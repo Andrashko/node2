@@ -21,7 +21,7 @@
         >
         </book-template>
       </ul>
-      <p v-if="books.length == 0">Йде завантаження</p>
+      <p v-if="filtredBooks.length == 0"> Нема книг для показу </p>
     </div>
 
   </div>
@@ -29,7 +29,6 @@
 
 <script>
 import BookTemplate from "./BookTemplate.vue";
-import networking from "./../networking";
 import {mapActions, mapState} from "vuex";
 
 export default {
@@ -41,54 +40,19 @@ export default {
     return {
       searchTitleString: "",
       selected: null,
-
-      books: [],
-      newBook: {
-        Disount: 0,
-        Title: "",
-        Author: "",
-        Price: 0,
-        Cover: "",
-      },
-      editBook: {},
     };
   },
   async mounted() {  
-      this.books = await networking.getBooksList();
       await this.loadBooks();
+      console.log(this.Books);
   },
   methods: {
     ...mapActions(["showMessageForTime", "loadBooks", "deleteBookById"]),
-    sortBooksByPrice() {
-      this.books.sort((book1, book2) => (book1.Price > book2.Price ? 1 : -1));
-    },
-    addComment() {
-      this.book.Comments.push(this.newComment);
-    },
-    showHideComments() {
-      this.showComments = !this.showComments;
-    },
-    addNewBook() {
-      console.log(this.newBook);
-      let newBookCopy = Object.assign({}, this.newBook);
-      newBookCopy.Id = parseInt(Date.now());
-      this.books.push(newBookCopy);
-      this.showNewBookForm = false;
-    },
-    showForm() {
-      this.$refs.newBookForm.show();
-    },
+  
     selectBook(id) {
       this.selected = id;
     },
-    showEditForm() {
-      if (this.selected) {
-        let index = this.books.findIndex((book) => book._id == this.selected);
-        this.editBook = this.books[index];
-        console.log(this.editBook);
-        this.$refs.editBookForm.show();
-      } else alert("Виберіть книгу");
-    },
+    
     async deleteBook() {
       try {
           await this.deleteBookById(this.selected);
@@ -105,12 +69,12 @@ export default {
         console.log(err);
       }
     },
-    closeForm() {
-      this.showNewBookForm = false;
-    },
   },
   computed: {
     ...mapState(["Books", "Book"]),
+    areSomeBooks(){
+      return this.Books.length>0;
+    },
     sortedBooks() {
       function CompareBooks(book1, book2) {
         if (book1.Price > book2.Price) return 1;
@@ -119,7 +83,6 @@ export default {
         if (book1.Title < book2.Title) return -1;
         return 0;
       }
-      console.log(this.Books);
       return [...this.Books].sort(CompareBooks);
     },
     filtredBooks() {
