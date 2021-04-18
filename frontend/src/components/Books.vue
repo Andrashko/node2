@@ -28,7 +28,7 @@
 
 <script>
 import BookTemplate from "./BookTemplate.vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { showMessage } from "@/messaging";
 
 export default {
@@ -44,7 +44,6 @@ export default {
   },
   async mounted() {
     await this.loadBooks();
-    console.log(this.Books);
   },
   methods: {
     ...mapActions(["showMessageForTime", "loadBooks", "deleteBookById"]),
@@ -56,13 +55,13 @@ export default {
     async deleteBook() {
       const deletedBook = await this.deleteBookById(this.selected);
       if (deletedBook)
-        showMessage("Успішне вилученн", `Книга ${deletedBook.Title} вилуучена`);
+        showMessage("Успішне вилученн", `Книга ${deletedBook.Title} вилучена`);
     },
   },
   computed: {
-    ...mapState(["Books", "Book"]),
+    ...mapGetters(["books"]),
     areSomeBooks() {
-      return this.Books.length > 0;
+      return this.books.length > 0;
     },
     sortedBooks() {
       function CompareBooks(book1, book2) {
@@ -72,18 +71,13 @@ export default {
         if (book1.Title < book2.Title) return -1;
         return 0;
       }
-      return [...this.Books].sort(CompareBooks);
+      return [...this.books].sort(CompareBooks);
     },
     filtredBooks() {
       if (this.searchTitleString == "") return this.sortedBooks;
       return this.sortedBooks.filter((b) =>
         b.Title.includes(this.searchTitleString)
       );
-    },
-    selectedIndex() {
-      if (this.selected)
-        return this.books.findIndex((book) => book._id == this.selected);
-      return -1;
     },
     selectedEditURL() {
       return `/book/${this.selected}/edit`;

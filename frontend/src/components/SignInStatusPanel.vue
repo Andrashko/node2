@@ -1,14 +1,14 @@
 <template>
-  <navbar>
+  <div>
     <span v-if="signIn">
       Ви увійшли як <b>{{ login }}</b>
       <input type="button" value="вийти" @click="signOut" />
     </span>
     <router-link to="/signin" v-else> Увійти </router-link>
-  </navbar>
+  </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import auth from "@/auth";
 
 export default {
@@ -17,7 +17,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["login", "signIn"]),
+    ...mapGetters(["login", "signIn"]),
   },
   methods: {
     signOut() {
@@ -27,8 +27,10 @@ export default {
 };
 </script>
 <style scoped>
-navbar {
+div {
   position: absolute;
   right: 10px;
+  display: inline-block;
+
 }
 </style>

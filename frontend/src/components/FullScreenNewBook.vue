@@ -12,7 +12,7 @@
   </form>
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions } from "vuex";
 import { showMessage, showErrorMessage } from "@/messaging";
 import networking from "@/networking";
 
@@ -29,9 +29,6 @@ export default {
         Comments: [""],
       },
     };
-  },
-  computed: {
-    ...mapState(["Book"]),
   },
   methods: {
     ...mapActions(["addBook"]),

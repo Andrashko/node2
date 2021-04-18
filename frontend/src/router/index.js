@@ -53,9 +53,8 @@ const Router = createRouter({
 
 Router.beforeEach(async (to, from, next) => {
     if (to.meta && to.meta.needAuthentification) {       
-        if (await auth.ckeckSignInStatus()){
-            console.log(true);
-            next();}
+        if (await auth.ckeckSignInStatus())
+            next();
         else
             next("/signin");
     } else

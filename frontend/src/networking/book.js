@@ -17,7 +17,7 @@ export default {
 
     async deleteBook(id) {
         try {
-            const token = store.state.token;
+            const token = store.getters.token;
             if (!token)
                 return null;
             let deletedBook = (
@@ -40,7 +40,7 @@ export default {
 
     async postBook(book) {
         try {
-            const token = store.state.token;
+            const token = store.getters.token;
             if (!token)
                 return null;
             let newBook = (await axios.post(
@@ -71,7 +71,7 @@ export default {
 
     async patchBook(book, id) {
         try {
-            const token = store.state.token;
+            const token = store.getters.token;
             if (!token)
                 return null;
             let updatedBook = (

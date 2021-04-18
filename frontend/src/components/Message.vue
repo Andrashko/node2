@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from "vuex";
+import { mapGetters} from "vuex";
 
 export default {
   data() {
@@ -22,8 +22,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["messageCount"]),
-    ...mapState(["messages"]),
+    ...mapGetters(["messageCount", "messages"]),
     shownMessages() {
       if (this.messageCount < this.maxShowCount) return this.messages;
       else return this.messages.slice(0, this.maxShowCount);
@@ -33,7 +32,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["showMessageForTime", "addMessage"]),
     hidenMessagesText() {
       if (this.hidenMessagesCount < 5)
         return `Ще ${this.hidenMessagesCount} повідомленя`;
