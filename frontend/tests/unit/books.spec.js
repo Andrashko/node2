@@ -1,6 +1,6 @@
-import books from "./books";
+import books from "../../src/store/books";
 import { createStore } from "vuex";
-import networking from "../networking";
+import networking from "../../src/networking";
 
 const testBooks = [
     { "Comments": [""], "_id": "606c66b29e6e5730f462cdf9", "Stars": 5, "Disount": 10, "Title": "Vue.js: Up and Running", "Author": "Callum Macrae ", "Price": 29, "Cover": "https://localhost:7443/files/1617769526200.jpg", "__v": 0 },
@@ -9,16 +9,7 @@ const testBooks = [
 ];
 
 jest.mock(
-    "../networking",
-    () => ({
-        getBooksList: jest.fn(async () => {
-            return new Promise(
-                (resolve, reject) => {
-                    resolve(testBooks)
-                }
-            )
-        })
-    })
+    "../../src/networking"
 );
 
 describe("Unit tests for books vuex unit", () => {
@@ -69,6 +60,16 @@ describe("Unit tests for books vuex unit", () => {
                     loadBooks: books.actions.loadBooks
                 }
             });
+
+            networking.getBooksList = jest.fn(
+                async () => {
+                    return new Promise(
+                        (resolve, reject) => {
+                            resolve(testBooks)
+                        }
+                    )
+                }
+            );
 
             await store.dispatch("loadBooks");
 

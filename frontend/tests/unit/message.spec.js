@@ -1,4 +1,4 @@
-import message from "./message";
+import message from "../../src/store/message";
 import { createStore } from "vuex";
 
 describe("Unit tests for message vuex unit", () => {

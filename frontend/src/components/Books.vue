@@ -10,7 +10,7 @@
         v-model="searchTitleString"
       />
     </section>
-    <div class="wrap">
+    <div class="wrap" data-test="booklist">
       <ul v-if="filtredBooks.length > 0">
         <book-template
           v-for="b in filtredBooks"
@@ -46,7 +46,7 @@ export default {
     await this.loadBooks();
   },
   methods: {
-    ...mapActions(["showMessageForTime", "loadBooks", "deleteBookById"]),
+    ...mapActions(["loadBooks", "deleteBookById"]),
 
     selectBook(id) {
       this.selected = id;
