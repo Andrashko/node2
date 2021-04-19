@@ -16,18 +16,15 @@ export default {
         addBook(state, book) {
             state.books.push(book);
         },
-        setBook(state, book) {
-            state.Book = book;
+        updateBook({ books }, book) {
+            const index = books.findIndex(b => b._id === book._id);
+            if (index >= 0)
+                books.splice(index, 1, book);
         },
-        updateBook({ books: Books }, book) {
+        removeBook({ books }, book) {
             const index = Books.findIndex(b => b._id === book._id);
             if (index >= 0)
-                Books.splice(index, 1, book);
-        },
-        removeBook({ books: Books }, book) {
-            const index = Books.findIndex(b => b._id === book._id);
-            if (index >= 0)
-                Books.splice(index, 1);
+                books.splice(index, 1);
         }
     },
     actions: {
