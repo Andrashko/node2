@@ -1,3 +1,5 @@
 <template>
-    404 
+   <div>
+       Сторінку не знайдено
+   </div>
 </template>

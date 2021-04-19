@@ -1,7 +1,7 @@
 import store from "@/store";
+
 const ERROR_MESSAGE_DELAY = 10000;
 const MESSAGE_DELAY = 3000;
-
 
 function showErrorMessage(err) {
     console.error(err);

@@ -38,14 +38,6 @@ export default {
       this.$router.push(`/book/${this.book._id}`);
     },
   },
-  computed: {
-    shortTitle() {
-      const len = 20;
-      if (this.book.Title.length > len)
-        return this.book.Title.substring(0, len) + "...";
-      else return this.book.Title;
-    },
-  },
 };
 </script>
 

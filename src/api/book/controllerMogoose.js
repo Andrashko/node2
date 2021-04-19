@@ -27,77 +27,78 @@ function makeQueryObject(query) {
 };
 
 const bookControler = {
- 
-    get: async (req, res) =>{
+
+    get: async (req, res) => {
         try {
             const books = await Book.find(makeQueryObject(req.query));
             res.send(books);
         }
-        catch (error){
+        catch (error) {
             console.error(error);
             res.status(500).send(error);
         }
     },
-    getById: async (req, res) =>{
+    getById: async (req, res) => {
         try {
             const book = await Book.findById(req.params.id);
-            if (book) 
+            if (book)
                 res.send(book);
             else
-                res.status(404).send("Not Found");             
+                res.status(404).send("Not Found");
         }
-        catch (error){
+        catch (error) {
             console.error(error);
             res.status(500).send(error);
         }
     },
-    post: async (req, res) =>{
+    post: async (req, res) => {
         try {
             const newBook = new Book(req.body);
-            const book = await newBook.save();            
-            res.send(book);             
+            const book = await newBook.save();
+            res.send(book);
         }
-        catch (error){
+        catch (error) {
             console.error(error);
             res.status(500).send(error);
         }
     },
-    delete: async (req, res) =>{
+    delete: async (req, res) => {
         try {
             const book = await Book.findByIdAndDelete(req.params.id);
-            if (book) 
+            if (book) {
+                
                 res.send(book);
+            }
             else
-                res.status(404).send("Not Found");             
+                res.status(404).send("Not Found");
         }
-        catch (error){
+        catch (error) {
             console.error(error);
             res.status(500).send(error);
         }
     },
-    patch: async (req, res) =>{
+    patch: async (req, res) => {
         try {
             const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
                 returnOriginal: false
-            } );
-            if (book) 
+            });
+            if (book)
                 res.send(book);
             else
-                res.status(404).send("Not Found");             
+                res.status(404).send("Not Found");
         }
-        catch (error){
+        catch (error) {
             res.status(500).send(error);
         }
     },
-    put: async (req,res)=>{
-        try{
+    put: async (req, res) => {
+        try {
             let arr = req.body;
-            if (arr && arr.length)
-            {
+            if (arr && arr.length) {
                 const books = await Book.insertMany(arr);
                 res.send(books);
             }
-        } catch (error){
+        } catch (error) {
             res.status(500).send(error);
         }
     }

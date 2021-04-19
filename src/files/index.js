@@ -38,7 +38,7 @@ fileRouter.post("/", imgUpload.single("image"), (req, res) => {
 
 fileRouter.delete("/:filename", async (req, res) => {
     try {        
-        fs.unlinkSync(`files/${req.params.filename}`);
+        fs.unlinkSync(`/${req.params.filename}`);
     }
     catch (e){
         console.error(e);
