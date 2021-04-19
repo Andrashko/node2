@@ -1,6 +1,6 @@
 import axios from "axios";
-import { showErrorMessage } from "@/messaging";
-import store from "@/store";
+import { showErrorMessage } from "../messaging";
+import store from "../store";
 
 const baseUrl = "https://localhost:7443";
 

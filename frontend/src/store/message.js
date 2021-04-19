@@ -16,7 +16,7 @@ export default{
         },
         removeMessage({ messages }, message) {
             const indexOfMessage = messages.findIndex(
-                m => message.text === m.text
+                m => message.text === m.text 
             );
             if (indexOfMessage > -1)
                 messages.splice(indexOfMessage, 1);

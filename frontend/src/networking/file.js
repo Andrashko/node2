@@ -1,5 +1,5 @@
 import axios from "axios";
-import { showErrorMessage } from "@/messaging";
+import { showErrorMessage } from "../messaging";
 
 const baseUrl = "https://localhost:7443";
 
