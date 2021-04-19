@@ -22,7 +22,7 @@ export default {
                 books.splice(index, 1, book);
         },
         removeBook({ books }, book) {
-            const index = Books.findIndex(b => b._id === book._id);
+            const index = books.findIndex(b => b._id === book._id);
             if (index >= 0)
                 books.splice(index, 1);
         }
