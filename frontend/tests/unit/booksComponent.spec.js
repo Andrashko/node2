@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { createStore } from "vuex";
-import Books from '../../src/components/Books.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import Books from '../../src/components/Books.vue';
 
 const testBooks = [
     { "Comments": [""], "_id": "606c66b29e6e5730f462cdf9", "Stars": 5, "Disount": 10, "Title": "Vue.js: Up and Running", "Author": "Callum Macrae ", "Price": 29, "Cover": "https://localhost:7443/files/1617769526200.jpg", "__v": 0 },

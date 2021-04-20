@@ -1,16 +1,24 @@
 import { mount } from '@vue/test-utils';
-import { createRouter, createWebHistory } from 'vue-router';
 import store from "../../../src/store";
 import Books from '../../../src/components/Books.vue';
+import router from "../../../src/router";
 
-jest.mock("../../../src/networking", ()=>({
-    getBooksList: jest.fn(async ()=>{
-        return new Promise(
-            (resolve, reject)=>{
-                resolve([]);
-            }
-        );
-    })
+jest.mock("../../../src/networking",
+    ()=>({
+        getBooksList: jest.fn(async ()=>{
+            return new Promise(
+                (resolve, reject)=>{
+                    resolve([]);
+                }
+            );
+        }),
+        getLoginByToken: jest.fn(async ()=>{
+            return new Promise(
+                (resolve, reject)=>{
+                    resolve("login");
+                }
+            );
+        }),
 }));
 
 const testBooks = [
@@ -20,25 +28,6 @@ const testBooks = [
 ];
 
 describe("Integration test for Books component", () => {
-
-    let router;
-
-    beforeAll(()=>{
-        router = createRouter({
-            history:  createWebHistory(),
-            routes: [
-                {
-                    path: "/book/new",
-                    component: Books
-                },
-                {
-                    path:"/",
-                    component: Books
-                }
-            ]
-        })
-    });
-
     it("should show no books for 0 ", async () => { 
         store.commit("setBooks", []);  
         const component = mount(Books, {
@@ -46,7 +35,6 @@ describe("Integration test for Books component", () => {
                 plugins:[store, router]
             }
         });
-        
                 
         const books = await component.findAll('li');
 
@@ -61,9 +49,7 @@ describe("Integration test for Books component", () => {
                 plugins: [store, router]
             }
         });
-        
-        console.log(store.state);
-        
+                
         const books = await component.findAll('li');
 
         expect(books).toHaveLength(testBooks.length);

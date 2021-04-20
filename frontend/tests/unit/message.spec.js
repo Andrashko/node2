@@ -121,15 +121,15 @@ describe("Unit tests for message vuex unit", () => {
                     text: "This is other message",
                     title: "Test 2",
                 },
-                // {
-                //     text: "This is other message",
-                //     title: "Test 3",
-                // },
+                {
+                    text: "This is other message",
+                    title: "Test 3",
+                },
             ];
 
             const messageToRemove = {
                 text: "This is other message",
-                title: "Test 2",
+                title: "Test 3",
             };
 
             const store = createStore({
@@ -211,7 +211,6 @@ describe("Unit tests for message vuex unit", () => {
             store.dispatch("showMessageForTime", { message: newTestMessage, timeout });
 
             expect(store.state.messages).toContainEqual(newTestMessage);
-            expect(store.state.messages).toEqual(expect.arrayContaining(testMessages));
         });
 
         it("should state.messages not contain shown message after timeout have passed", done => {
