@@ -4,7 +4,7 @@ import { createStore } from "vuex";
 describe("Unit tests for message vuex unit", () => {
     describe("test getter messageCount", () => {
         it("should retun 2 for array of two messages", () => {
-            // Arrange - підготовка оточення;
+            // Arrange - підготовка оточення
             const testMessages = [
                 {
                     text: "This is test message",
